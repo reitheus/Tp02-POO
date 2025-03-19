@@ -1,6 +1,5 @@
 import javax.swing.*;
-import game.BancoPalavras;
-import game.Partida;
+import game.*;
 import grafico.*;
 public class Principal {
     public static void main(String[] args) {

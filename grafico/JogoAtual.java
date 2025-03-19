@@ -1,7 +1,7 @@
+package grafico;
+
 import javax.swing.*;
 import java.awt.*;
-
-
 public class JogoAtual extends JPanel{
     
 
