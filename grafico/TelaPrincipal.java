@@ -1,4 +1,7 @@
+package grafico;
 import javax.swing.*;
+
+
 import java.awt.*;
 
 public class TelaPrincipal extends JFrame {

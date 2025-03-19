@@ -1,25 +1,14 @@
-
 import javax.swing.*;
-import java.awt.*;
-
-public class Jogo {
+import game.BancoPalavras;
+import game.Partida;
+import grafico.*;
+public class Principal {
     public static void main(String[] args) {
+        Partida obj = new Partida(null,0);
+        BancoPalavras bdpalavra = new BancoPalavras();
         SwingUtilities.invokeLater(() -> {
             TelaPrincipal janela = new TelaPrincipal();
             janela.setVisible(true);
         });
     }
 }
-
-
-
-
-
-
-
-
-// public class Teste {
-//     public static void main(String[] args) {
-//         System.out.println("Olá, mundo!");
-//     }
-// }
