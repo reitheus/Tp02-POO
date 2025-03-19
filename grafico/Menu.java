@@ -1,13 +1,8 @@
-package grafico;
 import javax.swing.*;
-
-
-
 import java.awt.*;
 
 
 public class Menu extends JPanel{
-    //private JFrame frame;
 
     public Menu(TelaPrincipal tela) {
 

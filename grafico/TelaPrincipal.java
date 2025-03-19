@@ -1,7 +1,4 @@
-package grafico;
 import javax.swing.*;
-
-
 import java.awt.*;
 
 public class TelaPrincipal extends JFrame {
@@ -11,9 +8,9 @@ public class TelaPrincipal extends JFrame {
     public TelaPrincipal() {
         setTitle("Jogo da Forca");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(800, 600);
         setLocationRelativeTo(null);
-
+        
         // Criando o layout que troca os painéis
         cardLayout = new CardLayout();
         painelPrincipal = new JPanel(cardLayout);
