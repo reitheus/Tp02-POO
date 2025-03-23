@@ -1,4 +1,3 @@
-package grafico;
 import javax.swing.*;
 import java.awt.*;
 
