@@ -1,18 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.text.*;
+import javax.swing.*;
+// import java.util.Vector;
+// import java.util.Arrays;
 
 
 public class JogoAtual extends JPanel{
     private String letraDigitada = "";
+    private Vector<JLabel> digitos = new Vector<>();
+    private Vector<JLabel> barras = new Vector<>();
+    private Vector<Boolean> boneco = new Vector<>(Arrays.asList(false, false, false, false, false, false));
+    private int parteDoCorpo = 0;
+
 
     public JogoAtual(TelaPrincipal tela) {
 
-        String palavra = "ava";
+        //Ordem do Vector do boneco
+        // 1 cabeça, 2 tronco, 3 braço esquerdo, 4 braço direito, 5 perna esquerda, 6 perna direita
+
+        String palavra = "texto";
+        String palavraAlterada = "";
         String traco = "";
         
         //Texto do jogo atual
@@ -22,15 +37,35 @@ public class JogoAtual extends JPanel{
         add(titulo, BorderLayout.NORTH);
         titulo.setBounds(300, 50, 250, 50);
 
-
-        //Desenhas as barras das letras
+      
+        //Desenhas as barras das letras e passa a palavra para o vector de label
         for(int i = 0; i < palavra.length(); i++){
-            traco = traco + "_ ";
+            digitos.add(new JLabel(palavra.charAt(i)+""));
+            barras.add(new JLabel("_ "));
+            digitos.get(i).setBounds(i*30, 0, 40, 40);
+            digitos.get(i).setVisible(false);
+            barras.get(i).setBounds(i*30, 10, 40, 40);
+            
         }
-        JLabel barras = new JLabel(traco, SwingConstants.CENTER);
-        barras.setFont(new Font("Arial", Font.BOLD, 50));
-        add(barras, BorderLayout.NORTH);
-        barras.setBounds(300, 150, 300, 100);
+        
+        //adicionando os digitos da palavra no panel
+        JPanel painelPalavra = new JPanel();
+        for (JLabel digito : digitos) {
+            digito.setFont(new Font("Arial", Font.BOLD, 40));
+            painelPalavra.add(digito);
+        }
+        //adicionando as barras no painel
+        for (JLabel bar : barras) {
+            bar.setFont(new Font("Arial", Font.BOLD, 40));
+            painelPalavra.add(bar);
+        }
+
+        //adciona o painel da palavra para o painel principal
+        add(painelPalavra, BorderLayout.NORTH);
+        painelPalavra.setLayout(null);
+        painelPalavra.setBackground(Color.LIGHT_GRAY );
+        painelPalavra.setBounds(365, 160, 250, 100);
+
 
         //Texto que pede para digitar uma letra
         JLabel texto1 = new JLabel("Digite uma letra: ", SwingConstants.CENTER);
@@ -43,21 +78,47 @@ public class JogoAtual extends JPanel{
         letra.setBounds(500, 315, 70, 30);
         add(letra, BorderLayout.CENTER);
 
-
-        JLabel label = new JLabel("");
-        label.setBounds(300, 200, 200, 30);
-        add(label, BorderLayout.CENTER);
-
+        //Adiciona um botão que vai enviar a letra digitada na caixa de texto
         JButton botao = new JButton("Enviar Letra");
         botao.setBounds(580, 310, 130, 40);
         add(botao, BorderLayout.CENTER);
-        
+
+        // Criando um filtro para permitir apenas um caractere
+        ((AbstractDocument) letra.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if ((fb.getDocument().getLength() + text.length() - length) <= 1) { // Permite só 1 caractere
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
+
+        //Adiciona ação do botão que rebe o valor enviado na caixa de texto
         botao.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 letraDigitada = letra.getText();
-                label.setText("Você digitou: " + letraDigitada);
+                Boolean achou = false;
+                for(int j = 0; j < palavra.length(); j++){
+                    System.out.println("for "+ j);
+                    
+                    if(((digitos.get(j).getText()).trim()).equals(letraDigitada)){
+                        achou = true;
+                        System.out.println("entrou IF");
+                        digitos.get(j).setVisible(true);
+
+                    }
+                }
+                if(!achou){
+                    boneco.set(parteDoCorpo, true);
+                    parteDoCorpo++;
+                    repaint();
+
+                }
             }
         });
+
+        
+        
 
     }
 
@@ -68,10 +129,6 @@ public class JogoAtual extends JPanel{
 
         Graphics2D g2d = (Graphics2D) g; // Conversão para Graphics2D
         g2d.setStroke(new BasicStroke(5));
-
-        g2d.setColor(Color.black);
-        //g2d.drawRect(30, 70, 300, 400);
-
 
         //pontos (x1, y1, x2, y2)
         //chão
@@ -100,36 +157,47 @@ public class JogoAtual extends JPanel{
         //corda que enforca
         g2d.setColor(Color.black);
         g2d.drawLine(150, 80, 150, 130);
-
         //cabeça
-        //posx, poy, diametro largura, diametro altura
-        g2d.setColor(Color.black);
-        g2d.drawOval(125, 130, 50, 50);
-
-        //pontos (x1, y1, x2, y2)
+        if(boneco.get(0)){ 
+            //posx, poy, diametro largura, diametro altura
+            g2d.setColor(Color.black);
+            g2d.drawOval(125, 130, 50, 50);
+        }
         //Tronco
-        g2d.setColor(Color.black);
-        g2d.drawLine(150, 180, 150, 250);
+        if(boneco.get(1)){ 
+            //pontos (x1, y1, x2, y2)
+            
+            g2d.setColor(Color.black);
+            g2d.drawLine(150, 180, 150, 250);
+        }
 
-        //pontos (x1, y1, x2, y2)
         //Braço esquerdo
-        g2d.setColor(Color.black);
-        g2d.drawLine(105, 180, 150, 190);
+        if(boneco.get(2)){ 
+            //pontos (x1, y1, x2, y2)
+            g2d.setColor(Color.black);
+            g2d.drawLine(105, 180, 150, 190);
+        }
 
-        //pontos (x1, y1, x2, y2)
         //Braço Direito
-        g2d.setColor(Color.black);
-        g2d.drawLine(150, 190, 195, 180);
+        if(boneco.get(3)){ 
+            //pontos (x1, y1, x2, y2)
+            g2d.setColor(Color.black);
+            g2d.drawLine(150, 190, 195, 180);
+        }
 
-        //pontos (x1, y1, x2, y2)
         //Perna esquerdo
-        g2d.setColor(Color.black);
-        g2d.drawLine(105, 280, 150, 250);
+        if(boneco.get(4)){ 
+            //pontos (x1, y1, x2, y2)
+            g2d.setColor(Color.black);
+            g2d.drawLine(105, 280, 150, 250);
+        }
 
-        //pontos (x1, y1, x2, y2)
         //Perna Direita
-        g2d.setColor(Color.black);
-        g2d.drawLine(150, 250, 195, 280);
+        if(boneco.get(5)){ 
+            //pontos (x1, y1, x2, y2)
+            g2d.setColor(Color.black);
+            g2d.drawLine(150, 250, 195, 280);
+         }
 
 
     }
