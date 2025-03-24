@@ -1,14 +1,12 @@
+package grafico;
+import game.Partida;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.*;
+
 // import java.util.Vector;
 // import java.util.Arrays;
 
@@ -21,14 +19,11 @@ public class JogoAtual extends JPanel{
     private int parteDoCorpo = 0;
 
 
-    public JogoAtual(TelaPrincipal tela) {
+    public JogoAtual(TelaPrincipal tela,Partida jogo) {
 
         //Ordem do Vector do boneco
         // 1 cabeça, 2 tronco, 3 braço esquerdo, 4 braço direito, 5 perna esquerda, 6 perna direita
 
-        String palavra = "texto";
-        String palavraAlterada = "";
-        String traco = "";
         
         //Texto do jogo atual
         JLabel titulo = new JLabel("Jogo atual", SwingConstants.CENTER);

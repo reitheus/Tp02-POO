@@ -1,13 +1,19 @@
-import javax.swing.*;
-import game.*;
 import grafico.*;
+import game.*;
+
+import java.io.IOException;
+
+import javax.swing.*;
 public class Principal {
     public static void main(String[] args) {
-        Partida obj = new Partida(null,0);
-        BancoPalavras bdpalavra = new BancoPalavras();
-        SwingUtilities.invokeLater(() -> {
-            TelaPrincipal janela = new TelaPrincipal();
-            janela.setVisible(true);
-        });
+        try{
+            Partida jogo = new Partida("words-pt.txt");
+            SwingUtilities.invokeLater(() -> {
+                TelaPrincipal janela = new TelaPrincipal(jogo);
+                janela.setVisible(true);
+            });
+        }catch(IOException erroIO){
+            JOptionPane.showMessageDialog(null, "Erro ao carregar o dicionário de palavra verifique o caminho", "Erro de entrada",JOptionPane.WARNING_MESSAGE);
+        }
     }
 }
