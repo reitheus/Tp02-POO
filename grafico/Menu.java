@@ -1,9 +1,13 @@
 package grafico;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import game.Partida;
-
-import java.awt.*;
 
 
 public class Menu extends JPanel{
@@ -17,7 +21,8 @@ public class Menu extends JPanel{
         add(titulo, BorderLayout.NORTH);
 
         JButton botaoStart = new JButton("Start");
-        botaoStart.addActionListener(e -> tela.mudarTela("Tamanho")); // Muda para o jogo ao clicar
+        TelaTamanho telaTamanho = new TelaTamanho(tela);
+        botaoStart.addActionListener(e -> tela.trocaTela(tela, telaTamanho)); // Muda para o jogo ao clicar
 
         JPanel painelBotoes = new JPanel();
         painelBotoes.add(botaoStart);

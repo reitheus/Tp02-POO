@@ -1,7 +1,10 @@
 package grafico;
+import java.awt.CardLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import game.Partida;
-import javax.swing.*;
-import java.awt.*;
 
 public class TelaPrincipal extends JFrame {
     private CardLayout cardLayout;
@@ -19,12 +22,10 @@ public class TelaPrincipal extends JFrame {
 
         // Criando os painéis e adicionando ao painel principal
         Menu menu = new Menu(this,jogo);
-        JogoAtual jogoAtual = new JogoAtual(this,jogo);
-        TelaTamanho telaTamanho = new TelaTamanho(this,jogo);
+
 
         painelPrincipal.add(menu, "Menu");
-        painelPrincipal.add(jogoAtual, "Jogo");
-        painelPrincipal.add(telaTamanho,"Tamanho");
+
 
         add(painelPrincipal);
     }
@@ -34,5 +35,9 @@ public class TelaPrincipal extends JFrame {
         cardLayout.show(painelPrincipal, nomeTela);
     }
 
+    public void trocaTela(JFrame obj1, JFrame obj2){
+        obj1.setVisible(false);
+        obj2.setVisible(true);
+    }
     
 }

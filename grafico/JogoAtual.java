@@ -1,11 +1,27 @@
 package grafico;
-import game.Partida;
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.text.*;
+import java.util.Arrays;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
+import game.Partida;
 
 // import java.util.Vector;
 // import java.util.Arrays;
@@ -17,28 +33,27 @@ public class JogoAtual extends JPanel{
     private Vector<JLabel> barras = new Vector<>();
     private Vector<Boolean> boneco = new Vector<>(Arrays.asList(false, false, false, false, false, false));
     private int parteDoCorpo = 0;
-
+    public Partida jogo;
 
     public JogoAtual(TelaPrincipal tela,Partida jogo) {
 
         //Ordem do Vector do boneco
         // 1 cabeça, 2 tronco, 3 braço esquerdo, 4 braço direito, 5 perna esquerda, 6 perna direita
-
-        
+        this.jogo = jogo;
+        String palavra;
+        palavra = jogo.getPalavraSecreta();
         //Texto do jogo atual
         JLabel titulo = new JLabel("Jogo atual", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 26));
-        setLayout(null);
         add(titulo, BorderLayout.NORTH);
         titulo.setBounds(300, 50, 250, 50);
 
-      
         //Desenhas as barras das letras e passa a palavra para o vector de label
-        for(int i = 0; i < palavra.length(); i++){
+        for(int i = 0; i < jogo.getTam(); i++){
             digitos.add(new JLabel(palavra.charAt(i)+""));
             barras.add(new JLabel("_ "));
             digitos.get(i).setBounds(i*30, 0, 40, 40);
-            digitos.get(i).setVisible(false);
+            digitos.get(i).setVisible(true);
             barras.get(i).setBounds(i*30, 10, 40, 40);
             
         }
@@ -54,14 +69,12 @@ public class JogoAtual extends JPanel{
             bar.setFont(new Font("Arial", Font.BOLD, 40));
             painelPalavra.add(bar);
         }
-
         //adciona o painel da palavra para o painel principal
         add(painelPalavra, BorderLayout.NORTH);
         painelPalavra.setLayout(null);
         painelPalavra.setBackground(Color.LIGHT_GRAY );
         painelPalavra.setBounds(365, 160, 250, 100);
-
-
+        
         //Texto que pede para digitar uma letra
         JLabel texto1 = new JLabel("Digite uma letra: ", SwingConstants.CENTER);
         texto1.setFont(new Font("Arial", Font.BOLD, 20));
@@ -72,12 +85,12 @@ public class JogoAtual extends JPanel{
         JTextField letra = new JTextField(1); // Caixa de texto com 1 colunas
         letra.setBounds(500, 315, 70, 30);
         add(letra, BorderLayout.CENTER);
-
+        
         //Adiciona um botão que vai enviar a letra digitada na caixa de texto
         JButton botao = new JButton("Enviar Letra");
         botao.setBounds(580, 310, 130, 40);
         add(botao, BorderLayout.CENTER);
-
+        
         // Criando um filtro para permitir apenas um caractere
         ((AbstractDocument) letra.getDocument()).setDocumentFilter(new DocumentFilter() {
             @Override
@@ -88,33 +101,33 @@ public class JogoAtual extends JPanel{
             }
         });
 
+
         //Adiciona ação do botão que rebe o valor enviado na caixa de texto
         botao.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                letraDigitada = letra.getText();
-                Boolean achou = false;
-                for(int j = 0; j < palavra.length(); j++){
-                    System.out.println("for "+ j);
-                    
-                    if(((digitos.get(j).getText()).trim()).equals(letraDigitada)){
-                        achou = true;
-                        System.out.println("entrou IF");
-                        digitos.get(j).setVisible(true);
-
+                if(!jogo.jogoTerminado()){
+                    letraDigitada = letra.getText();
+                    if(!jogo.processarTentativa(letraDigitada.charAt(0))){
+                        //letra ja usada
+                        
+                    }else{
+                        digitos.get(jogo.getPosição()).setVisible(true);
                     }
+                    letra.setText("");
+                    
+                }else if(jogo.jogadorVenceu()){
+                    System.out.println("venceu");
+                }else{
+                    System.out.println("perdeu");
                 }
-                if(!achou){
-                    boneco.set(parteDoCorpo, true);
-                    parteDoCorpo++;
-                    repaint();
-
-                }
+                
             }
-        });
-
+        });  
         
-        
+    }
 
+    public void setJogo(Partida jogo) {
+        this.jogo = jogo;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package game;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 // Classe que gerencia as letras já usadas pelo jogador
 public class Jogador {

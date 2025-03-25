@@ -1,9 +1,10 @@
-import grafico.*;
-import game.*;
-
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import game.Partida;
+import grafico.TelaPrincipal;
 public class Principal {
     public static void main(String[] args) {
         try{
