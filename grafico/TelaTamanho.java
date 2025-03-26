@@ -7,27 +7,23 @@ import java.awt.event.ActionListener;
 import java.util.EmptyStackException;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import game.Partida;
 
 
-public class TelaTamanho extends JFrame{
+public class TelaTamanho extends JPanel{
     public int numDigitado;
 
     public TelaTamanho(TelaPrincipal tela,Partida jogo){
 
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setTitle("Tamanho");
-        setVisible(false);
-        setSize(250,150);
-
+        
         JLabel titulo = new JLabel("Tamanho da Palavra", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
         add(titulo, BorderLayout.NORTH);
@@ -50,10 +46,12 @@ public class TelaTamanho extends JFrame{
                             throw new EmptyStackException();
 
                         }else{
-                            JogoAtual forca = new JogoAtual(tela,jogo);
+                            tela.atualizarPainel(new JogoAtual(tela, jogo), "JogoAtual");
+                            tela.mudarTela("JogoAtual");
+                            System.out.println(jogo.getPalavraSecreta());
 
                         }
-                    } catch (NumberFormatException NumberFormatException){
+                    }catch (NumberFormatException NumberFormatException){
                         JOptionPane.showMessageDialog(null, "Digite um valor inteiro!","Entrada inválida",JOptionPane.ERROR_MESSAGE);
                     }catch(ArithmeticException ArithmeticException){
                         JOptionPane.showMessageDialog(null, "Digite um valor entre 3 e 14:","Valor inválido",JOptionPane.ERROR_MESSAGE);

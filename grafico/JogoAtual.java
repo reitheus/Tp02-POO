@@ -10,9 +10,11 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
 
+import javax.naming.directory.AttributeInUseException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -33,15 +35,17 @@ public class JogoAtual extends JPanel{
     private Vector<JLabel> barras = new Vector<>();
     private Vector<Boolean> boneco = new Vector<>(Arrays.asList(false, false, false, false, false, false));
     private int parteDoCorpo = 0;
-    public Partida jogo;
 
     public JogoAtual(TelaPrincipal tela,Partida jogo) {
 
         //Ordem do Vector do boneco
         // 1 cabeça, 2 tronco, 3 braço esquerdo, 4 braço direito, 5 perna esquerda, 6 perna direita
-        this.jogo = jogo;
+        
+        setLayout(null);
+
         String palavra;
         palavra = jogo.getPalavraSecreta();
+        System.out.println(jogo.getPalavraSecreta());
         //Texto do jogo atual
         JLabel titulo = new JLabel("Jogo atual", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 26));
@@ -53,7 +57,7 @@ public class JogoAtual extends JPanel{
             digitos.add(new JLabel(palavra.charAt(i)+""));
             barras.add(new JLabel("_ "));
             digitos.get(i).setBounds(i*30, 0, 40, 40);
-            digitos.get(i).setVisible(true);
+            digitos.get(i).setVisible(false);
             barras.get(i).setBounds(i*30, 10, 40, 40);
             
         }
@@ -106,15 +110,20 @@ public class JogoAtual extends JPanel{
         botao.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(!jogo.jogoTerminado()){
-                    letraDigitada = letra.getText();
-                    if(!jogo.processarTentativa(letraDigitada.charAt(0))){
-                        //letra ja usada
+                    try{
+                        letraDigitada = letra.getText();
+                        if(!jogo.processarTentativa(letraDigitada.charAt(0))){
+                            boneco.set(parteDoCorpo, true);
+                            parteDoCorpo++;
+                            tela.repaint();
+                        }else{
+                            digitos.get(jogo.getPosição()).setVisible(true);
+                        }
+                        letra.setText("");
                         
-                    }else{
-                        digitos.get(jogo.getPosição()).setVisible(true);
+                    }catch(ArrayStoreException erro1){
+                        JOptionPane.showInternalMessageDialog(null, "Letra ja utlizada. Tente outra!", "Letra Existente",JOptionPane.INFORMATION_MESSAGE);
                     }
-                    letra.setText("");
-                    
                 }else if(jogo.jogadorVenceu()){
                     System.out.println("venceu");
                 }else{
@@ -124,10 +133,6 @@ public class JogoAtual extends JPanel{
             }
         });  
         
-    }
-
-    public void setJogo(Partida jogo) {
-        this.jogo = jogo;
     }
 
     @Override

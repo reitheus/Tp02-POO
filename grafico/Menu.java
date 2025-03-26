@@ -21,8 +21,9 @@ public class Menu extends JPanel{
         add(titulo, BorderLayout.NORTH);
 
         JButton botaoStart = new JButton("Start");
-        TelaTamanho telaTamanho = new TelaTamanho(tela);
-        botaoStart.addActionListener(e -> tela.trocaTela(tela, telaTamanho)); // Muda para o jogo ao clicar
+
+        
+        botaoStart.addActionListener(e -> tela.mudarTela("Tamanho")); // Muda para o jogo ao clicar
 
         JPanel painelBotoes = new JPanel();
         painelBotoes.add(botaoStart);

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.naming.directory.AttributeInUseException;
+
 
 public class Partida {
     //Atributos
@@ -39,13 +41,14 @@ public class Partida {
 
     public boolean processarTentativa(char letra) {
         if (!jogador.tentarLetra(letra)) {
-            
-            return false; // Retorna falso se a letra já foi usada
+
+            return false;
         }
         boolean acertou = false;
         String palavraNormalizada = dicionario.removerAcentos(palavraSecreta);
         char letraNormalizada = dicionario.removerAcentos(String.valueOf(letra)).charAt(0);
         System.out.println(palavraNormalizada);
+        System.out.println(letraNormalizada);
         for (int i = 0; i < palavraSecreta.length(); i++) {
             if (palavraNormalizada.charAt(i) == letraNormalizada) {
                 estadoPalavra[i] = palavraSecreta.charAt(i); //coloca a letra na posição correta
@@ -100,11 +103,11 @@ public class Partida {
     public int getPosição() {
         return posição;
     }
+
     public void validaTam(int num){
   
         if(num >= 3 && num <=14){
             tamanho = num;
-            System.out.println("settam:"+tamanho);
         }else{
             throw new ArithmeticException();
         }

@@ -22,10 +22,9 @@ public class TelaPrincipal extends JFrame {
 
         // Criando os painéis e adicionando ao painel principal
         Menu menu = new Menu(this,jogo);
-
-
+        TelaTamanho tamanho = new TelaTamanho(this,jogo);
         painelPrincipal.add(menu, "Menu");
-
+        painelPrincipal.add(tamanho,"Tamanho");
 
         add(painelPrincipal);
     }
@@ -35,9 +34,8 @@ public class TelaPrincipal extends JFrame {
         cardLayout.show(painelPrincipal, nomeTela);
     }
 
-    public void trocaTela(JFrame obj1, JFrame obj2){
-        obj1.setVisible(false);
-        obj2.setVisible(true);
+    public void atualizarPainel(JPanel nome,String apilido){
+        painelPrincipal.add(nome,apilido);
     }
     
 }
