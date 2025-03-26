@@ -23,7 +23,7 @@ public class Menu extends JPanel{
         JButton botaoStart = new JButton("Start");
 
         
-        botaoStart.addActionListener(e -> tela.mudarTela("Tamanho")); // Muda para o jogo ao clicar
+        botaoStart.addActionListener(_ -> tela.mudarTela("Tamanho")); // Muda para o jogo ao clicar
 
         JPanel painelBotoes = new JPanel();
         painelBotoes.add(botaoStart);

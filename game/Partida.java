@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.naming.directory.AttributeInUseException;
-
-
 public class Partida {
     //Atributos
     private int tamanho;
+    private boolean acertou;
     private Dicionario dicionario;
     private Jogador jogador;
     private String palavraSecreta;
@@ -23,7 +21,7 @@ public class Partida {
     public Partida(String arquivo) throws IOException {
         dicionario = new Dicionario(arquivo);
         jogador = new Jogador();
-        posição = 0;
+        posição = -1;
     }
 
     //Metodos
@@ -41,10 +39,9 @@ public class Partida {
 
     public boolean processarTentativa(char letra) {
         if (!jogador.tentarLetra(letra)) {
-
             return false;
         }
-        boolean acertou = false;
+        acertou = false;
         String palavraNormalizada = dicionario.removerAcentos(palavraSecreta);
         char letraNormalizada = dicionario.removerAcentos(String.valueOf(letra)).charAt(0);
         System.out.println(palavraNormalizada);
@@ -100,6 +97,9 @@ public class Partida {
         return tamanho;
     }
     
+    public boolean getAcertou() {
+        return acertou;
+    }
     public int getPosição() {
         return posição;
     }

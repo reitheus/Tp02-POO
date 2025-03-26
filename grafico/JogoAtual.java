@@ -10,9 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
 
-import javax.naming.directory.AttributeInUseException;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -33,7 +31,7 @@ public class JogoAtual extends JPanel{
     private String letraDigitada = "";
     private Vector<JLabel> digitos = new Vector<>();
     private Vector<JLabel> barras = new Vector<>();
-    private Vector<Boolean> boneco = new Vector<>(Arrays.asList(false, false, false, false, false, false));
+    private Vector<Boolean> boneco = new Vector<>(Arrays.asList(false, false, false, false, false, false,false));
     private int parteDoCorpo = 0;
 
     public JogoAtual(TelaPrincipal tela,Partida jogo) {
@@ -45,7 +43,7 @@ public class JogoAtual extends JPanel{
 
         String palavra;
         palavra = jogo.getPalavraSecreta();
-        System.out.println(jogo.getPalavraSecreta());
+        
         //Texto do jogo atual
         JLabel titulo = new JLabel("Jogo atual", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 26));
@@ -89,6 +87,13 @@ public class JogoAtual extends JPanel{
         JTextField letra = new JTextField(1); // Caixa de texto com 1 colunas
         letra.setBounds(500, 315, 70, 30);
         add(letra, BorderLayout.CENTER);
+
+        //caixa de texto que recebe as letras usadas;
+        JLabel texto2 = new JLabel();
+        texto2.setFont(new Font("Arial", Font.BOLD, 20));
+        add(texto2, BorderLayout.SOUTH);
+        texto2.setBounds(250,400,215,50);
+  
         
         //Adiciona um botão que vai enviar a letra digitada na caixa de texto
         JButton botao = new JButton("Enviar Letra");
@@ -113,17 +118,32 @@ public class JogoAtual extends JPanel{
                     try{
                         letraDigitada = letra.getText();
                         if(!jogo.processarTentativa(letraDigitada.charAt(0))){
-                            boneco.set(parteDoCorpo, true);
-                            parteDoCorpo++;
-                            tela.repaint();
-                        }else{
-                            digitos.get(jogo.getPosição()).setVisible(true);
+                            JOptionPane.showMessageDialog(null, "Letra ja utlizada. Tente outra!", "Letra Existente",JOptionPane.INFORMATION_MESSAGE);
+                        }else {
+                            if(jogo.getAcertou()){
+                                for (int i = 0; i < jogo.getEstadoPalavra().length(); i++) {
+                                    if(jogo.getEstadoPalavra().charAt(i) != '_'){
+                                        digitos.get(i).setVisible(true);
+                                    }
+                                }
+    
+                            }else{
+                                boneco.set(parteDoCorpo, true);
+                                parteDoCorpo++;
+                                repaint();
+    
+                            }
                         }
+                        texto2.setText(jogo.getLetrasUsadas().toString());
                         letra.setText("");
-                        
-                    }catch(ArrayStoreException erro1){
-                        JOptionPane.showInternalMessageDialog(null, "Letra ja utlizada. Tente outra!", "Letra Existente",JOptionPane.INFORMATION_MESSAGE);
+
+                    }catch(IllegalArgumentException erro){
+                        JOptionPane.showMessageDialog(null, "Digite apenas Letras!", "Erro de entrada",JOptionPane.ERROR_MESSAGE);
+                    }catch(NullPointerException vaz){
+                        JOptionPane.showMessageDialog(null, "Digite uma Letras!", "Erro de entrada",JOptionPane.WARNING_MESSAGE);
                     }
+                    
+                    
                 }else if(jogo.jogadorVenceu()){
                     System.out.println("venceu");
                 }else{
@@ -212,7 +232,12 @@ public class JogoAtual extends JPanel{
             g2d.drawLine(150, 250, 195, 280);
          }
 
-
+        //X
+        if(boneco.get(6)){
+            g2d.setColor(Color.RED);
+            g2d.drawLine(120, 120, 180, 180);
+            g2d.drawLine(120, 180, 180, 120);
+        }
     }
 
 
