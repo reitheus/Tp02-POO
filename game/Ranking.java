@@ -42,12 +42,12 @@ public class Ranking {
         fail++;
     }
 
-    public void addScore(){
-        totalScore  = totalScore + totalScoreP;
+    public void addScore(int fails){
+        totalScore  = totalScore + totalScoreP - (1 * fails);
     }
-
-    public void calculaTScoreP(int tam,int fails){
-        totalScoreP = 10 + (2 * tam) - (1 * fails);
+    
+    public void calculaTScoreP(int tam,int hits){
+        totalScoreP = 10 * hits + (2 * tam);
     }
 
 }

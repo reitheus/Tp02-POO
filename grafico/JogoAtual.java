@@ -22,6 +22,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 
 import game.Partida;
+import game.Ranking;
 
 // import java.util.Vector;
 // import java.util.Arrays;
@@ -38,9 +39,9 @@ public class JogoAtual extends JPanel{
 
         //Ordem do Vector do boneco
         // 1 cabeça, 2 tronco, 3 braço esquerdo, 4 braço direito, 5 perna esquerda, 6 perna direita
-        
+        tela.setSize(800,600);
         setLayout(null);
-
+        Ranking temScore = new Ranking();
         String palavra;
         palavra = jogo.getPalavraSecreta();
         
@@ -99,6 +100,11 @@ public class JogoAtual extends JPanel{
         JButton botao = new JButton("Enviar Letra");
         botao.setBounds(580, 310, 130, 40);
         add(botao, BorderLayout.CENTER);
+
+        //Adiciona um botão que vai iniciar uma nova partida
+        JButton botao1 = new JButton("Novo jogo");
+        botao1.setBounds(580, 410, 130, 40);
+        add(botao1, BorderLayout.CENTER);
         
         // Criando um filtro para permitir apenas um caractere
         ((AbstractDocument) letra.getDocument()).setDocumentFilter(new DocumentFilter() {
@@ -114,7 +120,16 @@ public class JogoAtual extends JPanel{
         //Adiciona ação do botão que rebe o valor enviado na caixa de texto
         botao.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(!jogo.jogoTerminado()){
+                if(jogo.jogadorVenceu()){
+                    temScore.addHit();
+                    temScore.calculaTScoreP(jogo.getTam(),temScore.getHit());
+                    temScore.addScore(temScore.getFail());
+                    jogo.setEstatistica(temScore);
+                    jogo.resetarPalavrasUsadas();
+                    JOptionPane.showMessageDialog(null,"Parabéns você venceu! \n Escolha uma das opções para continuar:","Vencedor da Partida!",JOptionPane.INFORMATION_MESSAGE);
+                    tela.atualizarPainel(new Info(tela, jogo), "InfoJogo");
+                    tela.mudarTela("InfoJogo");
+                }else if(!jogo.jogoTerminado()){
                     try{
                         letraDigitada = letra.getText();
                         if(!jogo.processarTentativa(letraDigitada.charAt(0))){
@@ -131,7 +146,7 @@ public class JogoAtual extends JPanel{
                                 boneco.set(parteDoCorpo, true);
                                 parteDoCorpo++;
                                 repaint();
-    
+                                temScore.addFail();
                             }
                         }
                         texto2.setText(jogo.getLetrasUsadas().toString());
@@ -139,19 +154,29 @@ public class JogoAtual extends JPanel{
 
                     }catch(IllegalArgumentException erro){
                         JOptionPane.showMessageDialog(null, "Digite apenas Letras!", "Erro de entrada",JOptionPane.ERROR_MESSAGE);
-                    }catch(NullPointerException vaz){
-                        JOptionPane.showMessageDialog(null, "Digite uma Letras!", "Erro de entrada",JOptionPane.WARNING_MESSAGE);
+                    }catch(StringIndexOutOfBoundsException vaz){
+                        JOptionPane.showMessageDialog(null, "Digite uma Letra!", "Erro de entrada",JOptionPane.WARNING_MESSAGE);
                     }
                     
-                    
-                }else if(jogo.jogadorVenceu()){
-                    System.out.println("venceu");
                 }else{
-                    System.out.println("perdeu");
+                    temScore.addScore(temScore.getFail());
+                    jogo.setEstatistica(temScore);
+                    jogo.resetarPalavrasUsadas();
+                    JOptionPane.showMessageDialog(null,"Você Perdeu! \n Escolha uma das opções para continuar:","Fim da Partida!",JOptionPane.INFORMATION_MESSAGE);
+                    tela.atualizarPainel(new Info(tela, jogo), "InfoJogo");
+                    tela.mudarTela("InfoJogo");
                 }
+                
                 
             }
         });  
+        botao1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                jogo.getPalavraSecreta();
+                tela.atualizarPainel(new Menu(tela, jogo), "Menu");
+                tela.mudarTela("Menu");
+            }
+        });
         
     }
 

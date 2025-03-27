@@ -13,8 +13,7 @@ public class TelaPrincipal extends JFrame {
     public TelaPrincipal(Partida jogo) {
         setTitle("Jogo da Forca");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLocationRelativeTo(null);
+        
         
         // Criando o layout que troca os painéis
         cardLayout = new CardLayout();
@@ -23,8 +22,11 @@ public class TelaPrincipal extends JFrame {
         // Criando os painéis e adicionando ao painel principal
         Menu menu = new Menu(this,jogo);
         TelaTamanho tamanho = new TelaTamanho(this,jogo);
+        
         painelPrincipal.add(menu, "Menu");
         painelPrincipal.add(tamanho,"Tamanho");
+
+        
 
         add(painelPrincipal);
     }
@@ -36,6 +38,10 @@ public class TelaPrincipal extends JFrame {
 
     public void atualizarPainel(JPanel nome,String apilido){
         painelPrincipal.add(nome,apilido);
+    }
+
+    public void novoJogo(JPanel menu){
+        cardLayout.removeLayoutComponent(menu);
     }
     
 }

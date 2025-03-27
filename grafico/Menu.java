@@ -15,6 +15,8 @@ public class Menu extends JPanel{
     public Menu(TelaPrincipal tela,Partida jogo) {
 
         setLayout(new BorderLayout());
+        tela.setSize(800, 600);
+        tela.setLocationRelativeTo(null);
 
         JLabel titulo = new JLabel("Jogo da Forca", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 24));

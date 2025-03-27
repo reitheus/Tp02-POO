@@ -14,6 +14,7 @@ public class Partida {
     private char[] estadoPalavra;
     private int tentativasRestantes;
     private int posição;
+    private Ranking estatistica;
 
     //Construtor
     public Partida(){
@@ -21,6 +22,7 @@ public class Partida {
     public Partida(String arquivo) throws IOException {
         dicionario = new Dicionario(arquivo);
         jogador = new Jogador();
+        estatistica = new Ranking();
         posição = -1;
     }
 
@@ -44,13 +46,10 @@ public class Partida {
         acertou = false;
         String palavraNormalizada = dicionario.removerAcentos(palavraSecreta);
         char letraNormalizada = dicionario.removerAcentos(String.valueOf(letra)).charAt(0);
-        System.out.println(palavraNormalizada);
-        System.out.println(letraNormalizada);
         for (int i = 0; i < palavraSecreta.length(); i++) {
             if (palavraNormalizada.charAt(i) == letraNormalizada) {
                 estadoPalavra[i] = palavraSecreta.charAt(i); //coloca a letra na posição correta
                 posição = i;
-                System.out.println(posição);
                 acertou = true;
 
             }
@@ -62,7 +61,7 @@ public class Partida {
     }
 
     public boolean jogoTerminado() {
-        return tentativasRestantes == 0 || new String(estadoPalavra).equals(palavraSecreta);
+        return tentativasRestantes == 0;
     }
 
     public boolean jogadorVenceu() {
@@ -104,6 +103,13 @@ public class Partida {
         return posição;
     }
 
+    public void setEstatistica(Ranking estatistica){
+        this.estatistica = estatistica;
+    }
+    
+    public Ranking getEstatistica() {
+        return estatistica;
+    }
     public void validaTam(int num){
   
         if(num >= 3 && num <=14){
